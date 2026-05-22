@@ -17,7 +17,7 @@ Since this is a static front-end project, you can run it using any web browser.
 
 Additional Notes & Considerations 
 Please ensure your volume is on to experience the interactive sound effects.
-There are 2 audio easter eggs:
+Th ere are 2 audio easter eggs:
 
 1. Clicking on the UMPSA logo on the homepage will trigger a segment of the UMPSA official song.
 
