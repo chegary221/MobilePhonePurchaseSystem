@@ -9,5 +9,11 @@ public class MobilePhonePurchaseSystem {
                 // 呼叫方法顯示手機資訊
                 phone1.displayInfo();
                 phone2.displayInfo();
-                    }
-                    }
+                
+            CheckoutController checkout = new CheckoutController();
+            Customer customer = new Customer("C001", "Gary","gary@gmail.com","123456","0123456789","Penang","ACC001");
+            Phone phone = new Phone("F001","Apple", "iPhone 15", 3899.00, 10,"Stock Available");
+            Cart cart = new Cart(10);
+            cart.addItem(new CartItem(phone, 2));
+            checkout.buyNow(customer, phone, cart, 2);}
+}

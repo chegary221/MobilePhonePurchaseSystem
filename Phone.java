@@ -18,6 +18,16 @@ public class Phone {
         this.stockStatus = stockStatus;
     }
 
+    public String checkStock(int qty) {
+
+        if (stockQuantity == 0) return "out of stock";
+        else if (stockQuantity < qty) return "insufficient";
+        else return "available";
+    }
+
+    public void reduceStock(int qty) {
+        stockQuantity -= qty;
+    }
     public String getPhoneID() { return phoneID; }
     public void setPhoneID(String phoneID) { this.phoneID = phoneID; }
 
