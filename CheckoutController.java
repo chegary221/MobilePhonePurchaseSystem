@@ -14,7 +14,7 @@ public class CheckoutController {
 
     private double calculateAmount(CartItem[] items, Phone phone, int qty) {return phone.getPrice() * qty;}
 
-    private void displaySummary(Order order) {System.out.println("Order created: " + order);}
+    private void displaySummary(Order order) {System.out.println("Order created: " + order.getOrderID());}
 
     private void displayOutOfStock() {System.out.println("Out of stock");}
     private void displayInsufficient() {System.out.println("Insufficient stock");}

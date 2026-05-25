@@ -8,8 +8,7 @@ public class Customer extends User {
                     String contactNum, String address, String accountID) {
         super(userID, name, email, password, contactNum);
         this.address = address;
-        this.accountID = accountID;
-    }
+        this.accountID = accountID;}
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }

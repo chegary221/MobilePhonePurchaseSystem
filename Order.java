@@ -19,8 +19,7 @@ public class Order {
         this.items = items;
         this.amount = amount;
         this.status = "Pending";
-        this.payment = new Payment(); // composition ✔
-    }
+        this.payment = new Payment(); }
             
     public Order() {}
 
