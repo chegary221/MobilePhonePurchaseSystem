@@ -9,13 +9,14 @@ public class Phone {
     public Phone() {}
 
     public Phone(String phoneID, String brand, String model,
-                 double price, int stockQuantity, String stockStatus) {
+                 double price, int stockQuantity) {
         this.phoneID = phoneID;
         this.brand = brand;
         this.model = model;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.stockStatus = stockStatus;}
+        if (stockQuantity > 0) this.stockStatus="available";
+        else this.stockStatus="out of stock";}
 
     public String checkStock(int qty) {
         if (stockQuantity == 0) return "out of stock";

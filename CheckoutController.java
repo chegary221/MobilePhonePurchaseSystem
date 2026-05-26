@@ -1,20 +1,43 @@
 public class CheckoutController {
 
-    public void buyNow(Customer customer, Phone phone, Cart cart, int qty) {
+    public void buyNow(Customer customer, Cart cart) {
         CartItem[] items = cart.getItems();
-        String status = phone.checkStock(qty);
+        String status = checkStock(items);
         if (status.equals("available")) {
-            double amount = calculateAmount(items, phone, qty);
+            double amount = calculateAmount(items);
             Order order = new Order(items, amount);
-            phone.reduceStock(qty);
+            reduceStock(items);
             cart.clear();
-            displaySummary(order);} 
-        else if (status.equals("out of stock")) displayOutOfStock();
-        else  displayInsufficient();}
+            displaySummary(order, items);} 
+        else if (status.equals("out of stock")) {displayOutOfStock();} 
+        else {displayInsufficient();} }
 
-    private double calculateAmount(CartItem[] items, Phone phone, int qty) {return phone.getPrice() * qty;}
+    // CHECK STOCK (loop)
+    private String checkStock(CartItem[] items) {
+        for (CartItem item : items) {
+            if (item != null) {
+                String status = item.getPhone().checkStock(item.getQty());
+                if (!status.equals("available")) return status; } }
+            return "available";}
 
-    private void displaySummary(Order order) {System.out.println("Order created: " + order.getOrderID());}
+    // REDUCE STOCK
+    private void reduceStock(CartItem[] items) {
+        for (CartItem item : items) {
+            if (item != null) item.getPhone().reduceStock(item.getQty());} }
+
+    // CALCULATE TOTAL
+    private double calculateAmount(CartItem[] items) {
+        double total = 0;
+        for (CartItem item : items) {
+            if (item != null) {total += item.getPhone().getPrice() * item.getQty();} }
+        return total; }
+
+    // DISPLAY
+    private void displaySummary(Order order, CartItem[] items) {
+        System.out.println("Order ID: " + order.getOrderID());
+        System.out.println("Amount: " + order.getAmount());
+        for (CartItem item : items) {
+            if (item != null) System.out.println(item.getPhone().getBrand()+ " x " + item.getQty());} }
 
     private void displayOutOfStock() {System.out.println("Out of stock");}
     private void displayInsufficient() {System.out.println("Insufficient stock");}

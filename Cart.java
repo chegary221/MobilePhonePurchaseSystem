@@ -14,7 +14,11 @@ public class Cart {
             size++;
             System.out.println("Item added into cart.");} 
         else System.out.println("Cart is full.");}
-    public CartItem[] getItems() {return items;}
+        
+    public CartItem[] getItems() {
+        CartItem[] actualItems = new CartItem[size];
+        for (int i = 0; i < size; i++) {actualItems[i] = items[i];}
+        return actualItems;}
 
     public void clear() {
         for (int i = 0; i < size; i++) items[i] = null;
