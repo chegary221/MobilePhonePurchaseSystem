@@ -9,4 +9,5 @@ public class CartItem {
 
     public int getQty() {return qty;}
     public Phone getPhone() {return phone;}
+    public double calculateSubtotal() {return phone.getPrice() * qty;}
 }
