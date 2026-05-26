@@ -5,9 +5,9 @@ public class CheckoutController {
         String status = checkStock(items);
         if (status.equals("available")) {
             double amount = calculateAmount(items);
-            Order order = new Order(items, amount);
+            Order order = new Order(customer, items, amount);
             reduceStock(items);
-            cart.clear();
+            cart.clearCart();
             displaySummary(order, items);} 
         else if (status.equals("out of stock")) {displayOutOfStock();} 
         else {displayInsufficient();} }
@@ -35,9 +35,10 @@ public class CheckoutController {
     // DISPLAY
     private void displaySummary(Order order, CartItem[] items) {
         System.out.println("Order ID: " + order.getOrderID());
-        System.out.println("Amount: " + order.getAmount());
+        System.out.println("Order Date: " + order.getOrderDate());
         for (CartItem item : items) {
-            if (item != null) System.out.println(item.getPhone().getBrand()+ " x " + item.getQty());} }
+            if (item != null) System.out.println(item.getPhone().getBrand()+ "-" +item.getPhone().getModel()+"   * " + item.getQty());} 
+        System.out.println("Amount: " + order.getAmount());}
 
     private void displayOutOfStock() {System.out.println("Out of stock");}
     private void displayInsufficient() {System.out.println("Insufficient stock");}

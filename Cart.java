@@ -20,7 +20,7 @@ public class Cart {
         for (int i = 0; i < size; i++) {actualItems[i] = items[i];}
         return actualItems;}
 
-    public void clear() {
+    public void clearCart() {
         for (int i = 0; i < size; i++) items[i] = null;
         size = 0;}
 }

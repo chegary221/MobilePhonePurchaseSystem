@@ -19,9 +19,8 @@ public class Phone {
         else this.stockStatus="out of stock";}
 
     public String checkStock(int qty) {
-        if (stockQuantity == 0) return "out of stock";
-        else if (stockQuantity < qty) return "insufficient";
-        else return "available";}
+        if (stockQuantity < qty && stockQuantity >0) return "insufficient";
+        else return stockStatus;}
     public void reduceStock(int qty) {stockQuantity -= qty;}
     
     public String getPhoneID() { return phoneID; }

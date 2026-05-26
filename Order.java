@@ -2,7 +2,8 @@ import java.util.Date;
 
 public class Order {
     private static int counter = 1000;
-
+    
+    private Customer customer;
     private String orderID;
     private Date orderDate;
     private CartItem[] items;
@@ -12,8 +13,8 @@ public class Order {
    
 
     // MAIN constructor ✔
-    public Order(CartItem[] items, double amount) {
-
+    public Order(Customer customer, CartItem[] items, double amount) {
+        this.customer=customer;
         this.orderID = "ORD" + counter++;
         this.orderDate = new Date();
         this.items = items;
@@ -22,6 +23,7 @@ public class Order {
         this.payment = new Payment(); }
             
     public Order() {}
+    public Customer getCustomer(){ return customer;}
 
     public String getOrderID() { return orderID; }
     public void setOrderID(String orderID) { this.orderID = orderID; }
