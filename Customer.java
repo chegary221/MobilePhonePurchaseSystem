@@ -2,8 +2,6 @@ public class Customer extends User {
     private String address;
     private Cart cart;
 
-    public Customer() {}
-
     public Customer(String userID, String name, String email, String password,
                     String contactNum, String address) {
         super(userID, name, email, password, contactNum);
@@ -13,4 +11,9 @@ public class Customer extends User {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
     public Cart getCart() { return cart; }
+
+    @Override
+    public String getRole() {
+        return "Customer";
+    }
 }
