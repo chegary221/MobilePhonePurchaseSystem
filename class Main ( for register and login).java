@@ -1,23 +1,67 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
+        // Scanner object to capture real-time keyboard inputs
+        Scanner scanner = new Scanner(System.in);
+        
         RegisterPage registerPage = new RegisterPage();
         LoginPage loginPage = new LoginPage();
 
-        // 1. Try Invalid Registration (E2 - Validation Error)
-        registerPage.inputDetails("JohnDoe", "john.com", "pass123", "12345");
+        System.out.println("===================================================");
+        System.out.println("📱 WELCOME TO THE MOBILE PHONE PURCHASE SYSTEM 📱");
+        System.out.println("===================================================");
 
-        // 2. Try Valid Registration (Basic Flow)
-        registerPage.inputDetails("JohnDoe", "john@test.com", "securePass", "012-345678");
+        while (true) {
+            System.out.println("\n--- MAIN MENU ---");
+            System.out.println("1. Register a New Account");
+            System.out.println("2. Log In");
+            System.out.println("3. Exit System");
+            System.out.print("Select an option (1-3): ");
+            
+            String choice = scanner.nextLine().trim();
 
-        // 3. Try Registering same email again (E1 - Duplicate Identity)
-        registerPage.inputDetails("JohnClone", "john@test.com", "anotherPass", "012-999999");
+            switch (choice) {
+                case "1":
+                    System.out.println("\n--- REGISTRATION FORM ---");
+                    System.out.print("Enter Username: ");
+                    String username = scanner.nextLine();
 
-        // 4. Try Login with Wrong Password (E2 - Auth Failure)
-        loginPage.enterLogin("john@test.com", "wrongPass1");
-        loginPage.enterLogin("john@test.com", "wrongPass2");
-        loginPage.enterLogin("john@test.com", "wrongPass3"); // This 3rd failure triggers lockout
+                    System.out.print("Enter Email: ");
+                    String email = scanner.nextLine();
 
-        // 5. Try Logging in after Account Lockout (E1 - Account Lockout)
-        loginPage.enterLogin("john@test.com", "securePass"); 
+                    System.out.print("Enter Password: ");
+                    String password = scanner.nextLine();
+
+                    System.out.print("Enter Phone Number: ");
+                    String phone = scanner.nextLine();
+
+                    // This triggers your validation and saves data dynamically
+                    registerPage.inputDetails(username, email, password, phone);
+                    break;
+
+                case "2":
+                    System.out.println("\n--- LOGIN SCREEN ---");
+                    System.out.print("Enter Email: ");
+                    String loginEmail = scanner.nextLine();
+
+                    System.out.print("Enter Password: ");
+                    String loginPassword = scanner.nextLine();
+
+                    // This checks whatever you just typed against saved data
+                    loginPage.enterLogin(loginEmail, loginPassword);
+                    break;
+
+                case "3":
+                    System.out.println("\nExiting system. Have a great day!");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("\n⚠️ Invalid selection! Please type 1, 2, or 3.");
+                    break;
+            }
+        }
     }
 }
