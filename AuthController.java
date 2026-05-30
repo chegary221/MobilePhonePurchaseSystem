@@ -15,10 +15,10 @@ public class AuthController {
         }
 
         // Verify password
-        if (user.getPasswordHash().equals(password)) {
+        if (user.getPassword().equals(password)) {
             // Else: Correct Password Flow
             user.resetAttempts();
-            page.loadDashboard(user.getUsername());
+            page.loadDashboard(user.getName());
         } else {
             // E2: Authentication Failure (Wrong Credentials)
             user.addFailAttempt();

@@ -2,7 +2,7 @@ import java.util.Date;
 
 public class Order {
    
-    private static int counter = 1000;
+    private static int counter = 1;
     private Customer customer;
     private CartItem[] items; 
     private Payment payment;
@@ -13,7 +13,7 @@ public class Order {
 
     public Order(Customer customer, CartItem[] items, double amount) {
         this.customer = customer;
-        this.orderID = "ORD" + counter++;
+        this.orderID = String.format("ORD%04d", counter++);
         this.orderDate = new Date();
         this.items = items;
         this.amount = amount;

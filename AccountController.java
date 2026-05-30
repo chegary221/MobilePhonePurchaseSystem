@@ -5,28 +5,28 @@ public class AccountController {
     // Simulated Database Table
     private static List<User> userDatabase = new ArrayList<>();
 
-    public void submitData(String username, String email, String password, String phone, RegisterPage page) {
+    public void submitData(String username, String email, String password, String phone,String address, RegisterPage page) {
 
         if (!email.contains("@") || !email.contains(".com")) {
             page.displayError("Validation Failure: Email is missing '@' or '.com'.");
             return;
         }
-
-        if (phone == null || phone.trim().isEmpty()) {
+        else if (phone == null || phone.trim().isEmpty()) {
             page.displayError("Validation Failure: Phone Number cannot be blank.");
             return;
         }
-
-
-        if (checkEmail(email)) {
+        else if (address == null || address.trim().isEmpty()) {
+            page.displayError("Validation Failure: Address cannot be blank.");
+            return;
+        }
+        else if (checkEmail(email)) {
             page.displayError("This email is already associated with an account.");
             return;
         }
-
-
-        User newUser = new User(username, email, password, phone); 
-        if (saveNewUser(newUser)) {
-            page.displaySuccess();
+        else {
+        String userID = "C" + String.format("%03d", userDatabase.size() + 1);
+        Customer newUser = new Customer(userID, username, email, password, phone, address); 
+        if (saveNewUser(newUser)) {page.displaySuccess();}
         }
     }
 

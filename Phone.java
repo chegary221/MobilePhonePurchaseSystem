@@ -9,8 +9,8 @@ public class Phone extends Item {
         super("", 0.0); 
     }
 
-    public Phone(String phoneID, String brand, String model, double price, int stockQuantity) {
-        super(phoneID, price); 
+    public Phone(String itemID, String brand, String model, double price, int stockQuantity) {
+        super(itemID, price);
         this.brand = brand;
         this.model = model;
         this.stockQuantity = stockQuantity;

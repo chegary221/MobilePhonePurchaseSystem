@@ -4,8 +4,8 @@ public abstract class User {
     protected String email;
     protected String password;
     protected String contactNum;
-
-    public User() {}
+    protected int failedAttempts;
+    protected boolean isLocked;
 
     public User(String userID, String name, String email, String password, String contactNum) {
         this.userID = userID;
@@ -13,6 +13,19 @@ public abstract class User {
         this.email = email;
         this.password = password;
         this.contactNum = contactNum;
+        this.failedAttempts = 0;
+        this.isLocked = false;
+    }
+
+    public void addFailAttempt() {
+        this.failedAttempts++;
+        if (this.failedAttempts >= 3) { 
+            this.isLocked = true;
+        }
+    }
+
+    public void resetAttempts() {
+        this.failedAttempts = 0;
     }
 
     public String getUserID() { return userID; }
@@ -30,5 +43,6 @@ public abstract class User {
     public String getContactNum() { return contactNum; }
     public void setContactNum(String contactNum) { this.contactNum = contactNum; }
 
+    public boolean isLocked() { return isLocked; }
     public abstract String getRole();
 }
