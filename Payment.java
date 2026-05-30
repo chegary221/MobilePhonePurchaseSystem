@@ -30,4 +30,8 @@ public class Payment {
 
     public String getPaymentDetails() { return paymentDetails; }
     public void setPaymentDetails(String paymentDetails) { this.paymentDetails = paymentDetails; }
+
+    public String getPaymentStatus() {
+        return this.status;
+    }
 }
