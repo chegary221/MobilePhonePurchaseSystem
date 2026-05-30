@@ -8,17 +8,17 @@ public class InventoryController {
     public Database getDb() { return db; }
     public void setDb(Database db) { this.db = db; }
 
-    public PhoneItem[] requestInventory() {
+    public Phone[] requestInventory() {
         return db.fetchStockLevels();
     }
 
-    public void submitChanges(String action, PhoneItem data) {
+    public void submitChanges(String action, Phone data) {
         if(validatesInput(data)) {
             db.updateCentralDatabase(data);
         }
     }
 
-    public boolean validatesInput(PhoneItem data) {
+    public boolean validatesInput(Phone data) {
         return data.getPrice() > 0 && data.getStockLevel() >= 0;
     }
 }
