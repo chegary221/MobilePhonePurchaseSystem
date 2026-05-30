@@ -1,12 +1,12 @@
 public class Database {
     private String connectionString;
     private boolean isConnected;
-    private PhoneItem[] inventoryRecord;
+    private Phone[] inventoryRecord;
     private int itemCount;
 
     public Database() {
         this.connectionString = "jdbc:mock:localDB";
-        this.inventoryRecord = new PhoneItem[100];
+        this.inventoryRecord = new Phone[100];
         this.itemCount = 0;
         connectToDatabase();
     }
@@ -16,9 +16,9 @@ public class Database {
         System.out.println("Database connected using: " + connectionString);
     }
 
-    public PhoneItem[] getInventoryRecord() { return inventoryRecord; }
+    public Phone[] getInventoryRecord() { return inventoryRecord; }
     
-    public void updateCentralDatabase(PhoneItem item) {
+    public void updateCentralDatabase(Phone item) {
         if(itemCount < inventoryRecord.length) {
             inventoryRecord[itemCount] = item;
             itemCount++;
@@ -26,7 +26,7 @@ public class Database {
         }
     }
 
-    public PhoneItem[] fetchStockLevels() {
+    public Phone[] fetchStockLevels() {
         return inventoryRecord;
     }
 
