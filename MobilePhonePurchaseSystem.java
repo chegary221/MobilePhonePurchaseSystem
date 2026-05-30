@@ -12,12 +12,11 @@ public class MobilePhonePurchaseSystem {
                 phone2.displayInfo();
                 
             CheckoutController checkout = new CheckoutController();
-            Customer customer = new Customer("C001", "Gary","gary@gmail.com","123456","0123456789","Penang","ACC001");
-            Cart cart = new Cart(10);
-            cart.addItem(new CartItem(phone1, 2));
-            cart.addItem(new CartItem(phone2, 3));
-            cart.addItem(new CartItem(phone3, 5));
-            checkout.buyNow(customer, cart);}
+            Customer customer = new Customer("C001", "Gary","gary@gmail.com","123456","0123456789","Penang");
+            customer.getCart().addItem(new CartItem(phone1, 2));
+            customer.getCart().addItem(new CartItem(phone2, 3));
+            customer.getCart().addItem(new CartItem(phone3, 5));
+            checkout.buyNow(customer, customer.getCart());}
 }
 // 【留言区】
 // 优先完成自己负责的 USE CASE 的雏形

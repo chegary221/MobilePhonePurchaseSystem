@@ -1,5 +1,6 @@
 public class Customer extends User {
     private String address;
+    private Cart cart;
 
     public Customer() {}
 
@@ -7,8 +8,9 @@ public class Customer extends User {
                     String contactNum, String address) {
         super(userID, name, email, password, contactNum);
         this.address = address;
-        this.accountID = accountID;}
+        this.cart = new Cart(10);}
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+    public Cart getCart() { return cart; }
 }
