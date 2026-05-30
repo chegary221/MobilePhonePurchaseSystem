@@ -19,6 +19,6 @@ public class InventoryController {
     }
 
     public boolean validatesInput(Phone data) {
-        return data.getPrice() > 0 && data.getStockLevel() >= 0;
+        return data.getPrice() > 0 && data.getStockQuantity() >= 0;
     }
 }
