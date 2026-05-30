@@ -39,14 +39,20 @@ public class InventoryUI {
         }
     }
 
-    public PhoneItem inputRequiredData() {
-        System.out.println("Enter Model Name: ");
-        String name = scanner.nextLine();
+    public Phone inputRequiredData() {
+        System.out.println("Enter Brand (e.g., Apple, Samsung): ");
+        String brand = scanner.nextLine();
+        
+        System.out.println("Enter Model: ");
+        String model = scanner.nextLine();
+        
         System.out.println("Enter Price: ");
         double price = scanner.nextDouble();
-        System.out.println("Enter Stock Level: ");
-        int stock = scanner.nextInt();
-        return new PhoneItem("ITM" + System.currentTimeMillis(), price, name, stock);
+        
+        System.out.println("Enter Stock Quantity: ");
+        int stockQuantity = scanner.nextInt();
+        
+        return new Phone("PHN" + System.currentTimeMillis(), brand, model, price, stockQuantity);
     }
 
     public void displaySuccessConfirmation() { System.out.println("Action Completed Successfully."); }
