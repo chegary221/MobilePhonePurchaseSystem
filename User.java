@@ -1,9 +1,9 @@
 public class User {
-    private String userID;
-    private String name;
-    private String email;
-    private String password;
-    private String contactNum;
+    protected String userID;
+    protected String name;
+    protected String email;
+    protected String password;
+    protected String contactNum;
 
     public User() {}
 
@@ -29,4 +29,6 @@ public class User {
 
     public String getContactNum() { return contactNum; }
     public void setContactNum(String contactNum) { this.contactNum = contactNum; }
+
+    public abstract String getRole();
 }
