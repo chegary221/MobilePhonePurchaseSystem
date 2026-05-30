@@ -12,10 +12,6 @@ public class OrderController {
         this.orderList = new ArrayList<>();
     }
 
-    public String getPaymentStatus() {
-        return this.status;
-    }
-
     public List<Order> getTransactionHistory() {
         if (orderList == null || orderList.isEmpty()) {
             System.out.println("No transaction history found.");
@@ -63,8 +59,7 @@ public class OrderController {
 
                 Payment payment = order.getPayment();
                 if (payment != null) {
-                    System.out.println("Payment    : " + payment.getPaymentMethod()
-                            + " | " + payment.getPaymentStatus());
+                    System.out.println("Payment    : " + payment.getPaymentMethod() + " | " + payment.getPaymentStatus());
                 }
 
                 return order;
