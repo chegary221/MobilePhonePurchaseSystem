@@ -16,13 +16,13 @@ public class InventoryUI {
     }
 
     public void retrieveListOfPhoneAndStock() {
-        PhoneItem[] stockList = invController.requestInventory();
+        Phone[] stockList = invController.requestInventory(); 
         displayListOfPhoneAndStock(stockList);
     }
 
-    public void displayListOfPhoneAndStock(PhoneItem[] stockList) {
+    public void displayListOfPhoneAndStock(Phone[] stockList) { 
         System.out.println("Current Stock:");
-        for(PhoneItem item : stockList) {
+        for(Phone item : stockList) { 
             if(item != null) {
                 item.displayItemDetails(); 
             }
@@ -33,26 +33,22 @@ public class InventoryUI {
         System.out.println("Enter action (Add/Delete/Exit):");
         String action = scanner.nextLine();
         if(action.equalsIgnoreCase("Add")) {
-            PhoneItem newItem = inputRequiredData();
+            Phone newItem = inputRequiredData(); 
             invController.submitChanges(action, newItem);
             displaySuccessConfirmation();
         }
     }
 
-    public Phone inputRequiredData() {
-        System.out.println("Enter Brand (e.g., Apple, Samsung): ");
+    public Phone inputRequiredData() { 
+        System.out.println("Enter Brand: ");
         String brand = scanner.nextLine();
-        
         System.out.println("Enter Model: ");
         String model = scanner.nextLine();
-        
         System.out.println("Enter Price: ");
         double price = scanner.nextDouble();
-        
         System.out.println("Enter Stock Quantity: ");
-        int stockQuantity = scanner.nextInt();
-        
-        return new Phone("PHN" + System.currentTimeMillis(), brand, model, price, stockQuantity);
+        int stock = scanner.nextInt();
+        return new Phone("PHN" + System.currentTimeMillis(), brand, model, price, stock);
     }
 
     public void displaySuccessConfirmation() { System.out.println("Action Completed Successfully."); }
