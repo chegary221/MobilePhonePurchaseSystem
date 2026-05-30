@@ -33,4 +33,6 @@ public class Database {
     public boolean checkDependencies(String phoneID) { return false; }
     public boolean activeOrderConflict(String phoneID) { return false; }
     public boolean clearToDelete(String phoneID) { return true; }
+
+    public boolean isConnected() { return isConnected; }
 }
