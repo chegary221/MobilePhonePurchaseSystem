@@ -23,4 +23,7 @@ public class PaymentSession {
     
     public void timeoutError() { System.out.println("Timeout Error."); }
     public void orderDeclined() { System.out.println("Order Declined."); }
+
+    public String getSessionID() { return sessionID; }
+    public Order getCurrentOrder() { return currentOrder; }
 }
