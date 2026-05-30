@@ -1,30 +1,36 @@
-public class Phone {
-    private String phoneID;
+public class Phone extends Item {
+
     private String brand;
     private String model;
-    private double price;
     private int stockQuantity;
     private String stockStatus;
 
-    public Phone() {}
+    public Phone() {
+        super("", 0.0); 
+    }
 
-    public Phone(String phoneID, String brand, String model,
-                 double price, int stockQuantity) {
-        this.phoneID = phoneID;
+    public Phone(String phoneID, String brand, String model, double price, int stockQuantity) {
+        super(phoneID, price); 
         this.brand = brand;
         this.model = model;
-        this.price = price;
         this.stockQuantity = stockQuantity;
         if (stockQuantity > 0) this.stockStatus="available";
-        else this.stockStatus="out of stock";}
+        else this.stockStatus="out of stock";
+    }
+
 
     public String checkStock(int qty) {
-        if (stockQuantity < qty && stockQuantity >0) return "insufficient";
-        else return stockStatus;}
-    public void reduceStock(int qty) {stockQuantity -= qty;}
+        if (stockQuantity < qty && stockQuantity > 0) return "insufficient";
+        else return stockStatus;
+    }
+
+    public void reduceStock(int qty) {
+        stockQuantity -= qty;
+        if (stockQuantity <= 0) stockStatus = "out of stock";
+    }
     
-    public String getPhoneID() { return phoneID; }
-    public void setPhoneID(String phoneID) { this.phoneID = phoneID; }
+    public String getPhoneID() { return itemID; }
+    public void setPhoneID(String phoneID) { this.itemID = phoneID; }
 
     public String getBrand() { return brand; }
     public void setBrand(String brand) { this.brand = brand; }
@@ -42,6 +48,18 @@ public class Phone {
     public void setStockStatus(String stockStatus) { this.stockStatus = stockStatus; }
 
     public void displayInfo() {
-    System.out.println(brand + " " + model + " - 價格: RM" + price + ", 庫存: " + stockQuantity);}
+        System.out.println(brand + " " + model + " - Price: RM" + price + ", Stock: " + stockQuantity);
+    }
 
+
+    @Override
+    public void displayItemDetails() {
+        displayInfo(); 
+    }
+
+    public void removeRecord() {
+        this.stockQuantity = 0;
+        this.stockStatus = "out of stock";
+        System.out.println("Item " + brand + " " + model + " removed.");
+    }
 }
