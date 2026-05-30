@@ -11,7 +11,7 @@ public class SystemUI {
 
     public void initiateCheckout(Order order) {
         System.out.println("\n--- Checkout System ---");
-        displayTotalAmount(order.Amount());
+        displayTotalAmount(order.getAmount());
         payController.startPayment(order);
         requestPaymentDetails();
     }
