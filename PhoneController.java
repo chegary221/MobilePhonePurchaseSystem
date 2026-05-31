@@ -1,29 +1,39 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class PhoneController {
 
-    private List<Phone> phoneList;
+    private Phone[] phoneList;
+    private int phoneCount;
     private Cart cart;
 
-    public PhoneController(List<Phone> phoneList, Cart cart) {
+    public PhoneController(Phone[] phoneList, Cart cart) {
         this.phoneList = phoneList;
         this.cart = cart;
+        this.phoneCount = 0;
+        if (phoneList != null) {
+            for (int i = 0; i < phoneList.length; i++) {
+                if (phoneList[i] != null) {
+                    this.phoneCount++;
+                }
+            }
+        }
     }
 
     public PhoneController() {
-        this.phoneList = new ArrayList<>();
+        this.phoneList = new Phone[100];
+        this.phoneCount = 0;
     }
 
-    //Returns the full list of available phones
-    public List<Phone> requestPhoneList() {
-        if (phoneList == null || phoneList.isEmpty()) {
+    // 返回纯数组
+    public Phone[] requestPhoneList() {
+        if (phoneList == null || phoneCount == 0) {
             System.out.println("No phones available in the catalog.");
-            return new ArrayList<>();
+            return new Phone[0];
         }
+        
         System.out.println("=== Phone List ===");
-        for (Phone phone : phoneList) {
-            phone.displayInfo();
+        for (int i = 0; i < phoneCount; i++) {
+            if (phoneList[i] != null) {
+                phoneList[i].displayInfo();
+            }
         }
         return phoneList;
     }
@@ -34,15 +44,15 @@ public class PhoneController {
             return null;
         }
 
-        for (Phone phone : phoneList) {
-            if (phone.getPhoneID().equalsIgnoreCase(modelID)) {
+        for (int i = 0; i < phoneCount; i++) {
+            if (phoneList[i] != null && phoneList[i].getPhoneID().equalsIgnoreCase(modelID)) {
                 System.out.println("=== Phone Details ===");
-                System.out.println("Brand        : " + phone.getBrand());
-                System.out.println("Model        : " + phone.getModel());
-                System.out.println("Price        : RM" + String.format("%.2f", phone.getPrice()));
-                System.out.println("Stock        : " + phone.getStockQuantity());
-                System.out.println("Stock Status : " + phone.getStockStatus());
-                return phone;
+                System.out.println("Brand        : " + phoneList[i].getBrand());
+                System.out.println("Model        : " + phoneList[i].getModel());
+                System.out.println("Price        : RM" + String.format("%.2f", phoneList[i].getPrice()));
+                System.out.println("Stock        : " + phoneList[i].getStockQuantity());
+                System.out.println("Stock Status : " + phoneList[i].getStockStatus());
+                return phoneList[i];
             }
         }
 
@@ -63,7 +73,6 @@ public class PhoneController {
         }
 
         String stockCheck = phone.checkStock(qty);
-
         switch (stockCheck) {
             case "out of stock":
                 System.out.println("Sorry, " + phone.getBrand() + " " + phone.getModel()
@@ -86,8 +95,17 @@ public class PhoneController {
         }
     }
 
-    public List<Phone> getPhoneList() { return phoneList; }
-    public void setPhoneList(List<Phone> phoneList) { this.phoneList = phoneList; }
+    public void addPhone(Phone phone) {
+        if (phone != null && phoneCount < phoneList.length) {
+            phoneList[phoneCount] = phone;
+            phoneCount++;
+        } else {
+            System.out.println("Phone catalog is full, cannot add more.");
+        }
+    }
+
+    public Phone[] getPhoneList() { return phoneList; }
+    public void setPhoneList(Phone[] phoneList) { this.phoneList = phoneList; }
 
     public Cart getCart() { return cart; }
     public void setCart(Cart cart) { this.cart = cart; }
