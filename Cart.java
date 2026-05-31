@@ -23,4 +23,19 @@ public class Cart {
     public void clearCart() {
         for (int i = 0; i < size; i++) items[i] = null;
         size = 0;}
+
+    // Calculates the total price of all items currently in the cart
+    public double calculateTotal() {
+        double total = 0.0;
+        
+        // Loop through the array only up to the current 'size'
+        for (int i = 0; i < size; i++) {
+            if (items[i] != null) {
+                // Multiplies the price of the phone by the quantity added
+                total += (items[i].getPhone().getPrice() * items[i].getQuantity());
+            }
+        }
+        
+        return total;
+    }
 }
