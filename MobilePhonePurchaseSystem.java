@@ -120,6 +120,7 @@ public class MobilePhonePurchaseSystem {
                     break;
 
                 // ── NEW UC: Checkout ──────────────────────────────────────────
+                // ── NEW UC: Checkout ──────────────────────────────────────────
                 case "4":
                     if (currentUser == null || !currentUser.getRole().equals("Customer")) {
                         System.out.println("\n⚠️ Please log in as a Customer to access the checkout.");
@@ -127,15 +128,15 @@ public class MobilePhonePurchaseSystem {
                         // 1. Get the current logged-in Customer
                         Customer currentCustomer = (Customer) currentUser;
                         
-                        // 2. Generate a REAL order using their actual Cart data
-                        // (You may need to adjust this depending on how your Order constructor is written)
-                        Order realOrder = new Order(); 
+                        // 2. Grab the data from their cart
+                        // (Note: Adjust getItems() and calculateTotal() if your Cart class uses different method names!)
+                        CartItem[] cartItems = currentCustomer.getCart().getItems();
+                        double finalTotal = currentCustomer.getCart().calculateTotal(); 
                         
-                        // Example: Assuming your Order needs the total amount from the cart
-                        // double cartTotal = currentCustomer.getCart().calculateTotal();
-                        // realOrder.setAmount(cartTotal); 
+                        // 3. Build the REAL order using your teammate's best constructor!
+                        Order realOrder = new Order(currentCustomer, cartItems, finalTotal); 
                         
-                        // 3. Pass the real order to the UI!
+                        // 4. Send the fully built order to the UI!
                         systemUI.initiateCheckout(realOrder);
                     }
                     break;
