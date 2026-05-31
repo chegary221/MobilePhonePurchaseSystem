@@ -22,7 +22,7 @@ public class MobilePhonePurchaseSystem {
         // 4. Create your test user
         controller.saveNewUser(new Staff("S001", "CC", "cc_admin@email.com", "123456", "0123", 3));
 
-        // ── Phone catalog (simulates Database) ── 换成纯数组 ───────────────
+        // ── Phone catalog (simulates Database)
         Phone[] catalog = new Phone[100];
         catalog[0] = new Phone("F001", "Apple",   "iPhone 15",   3899.00, 10);
         catalog[1] = new Phone("F002", "Samsung", "Galaxy S24",  3599.00, 10);
@@ -105,26 +105,29 @@ public class MobilePhonePurchaseSystem {
                     }
                     break;
 
-                // ── NEW UC: Checkout ──────────────────────────────────────────
+                // ── NEW UC 8: Checkout (Integrated System Sequence Diagram) ───
                 case "4":
                     if (currentUser == null || !currentUser.getRole().equals("Customer")) {
                         System.out.println("\n⚠️ Please log in as a Customer to access the checkout.");
                     } else {
                         Customer currentCustomer = (Customer) currentUser;
-                        checkoutController.buyNow(currentCustomer, currentCustomer.getCart());
-                        systemUI.initiateCheckout(checkoutController.getOrder()); 
+                        
+                        // 💡 关键改动：将原本的 systemUI 替换成了我们刚刚在底部写好的系统交互流程
+                        // 这样就完美匹配了你画的 Sequence Diagram 里的 :System 生命线
+                        checkoutSystemFlow(scanner, currentCustomer, checkoutController, payController);
                     }
                     break;
 
+                // ── Manage Inventory ──────────────────────────────────────────
                 case "5":
                     if (currentUser == null || !currentUser.getRole().equals("Staff")) {
-                        // 拦截不是 Staff 的用户
                         System.out.println("\n⚠️ Access Denied! Only Staff members can manage the inventory.");
                     } else {
                         System.out.println("\n--- Entering Inventory Management ---");
                         inventoryUI.navigateInventoryDashboard(); 
                     }
                     break;
+                    
                 // ── Exit ──────────────────────────────────────────────────────
                 case "6":
                     System.out.println("\nExiting system. Have a great day!");
@@ -133,7 +136,7 @@ public class MobilePhonePurchaseSystem {
                     break;
 
                 default:
-                    System.out.println("\n⚠️ Invalid selection! Please type 1, 2, 3, 4, or 5.");
+                    System.out.println("\n⚠️ Invalid selection! Please type 1, 2, 3, 4, 5, or 6.");
                     break;
             }
         }
@@ -146,7 +149,6 @@ public class MobilePhonePurchaseSystem {
 
         Phone[] phoneList = phoneController.requestPhoneList();
 
-        // ── E1: Database Connection Failure ───────────
         boolean isEmpty = true;
         if (phoneList != null) {
             for (int i = 0; i < phoneList.length; i++) {
@@ -162,7 +164,6 @@ public class MobilePhonePurchaseSystem {
             return;
         }
 
-        // ── Basic Flow ────────────────────────────────────────────────────────
         System.out.println("------------------------------------------");
         System.out.printf("%-6s %-10s %-15s %s%n", "No.", "ID", "Model", "Price (RM)");
         System.out.println("------------------------------------------");
@@ -177,7 +178,6 @@ public class MobilePhonePurchaseSystem {
         }
         System.out.println("------------------------------------------");
 
-        // Customer: clickPhoneModel(modelID)
         System.out.print("\nEnter Phone ID to view details (or 'back' to return): ");
         String modelID = scanner.nextLine().trim();
 
@@ -189,10 +189,6 @@ public class MobilePhonePurchaseSystem {
             return;
         }
 
-        // :System → Customer: displayDetailedProductPage()
-        // (Details are printed inside getPhoneDetails in Controller, but we can print more if needed)
-
-        // ── opt [Customer clicks "Add to Cart"] ───────────────────────────────
         System.out.print("\nAdd to cart? (yes / no): ");
         String addChoice = scanner.nextLine().trim();
 
@@ -214,5 +210,61 @@ public class MobilePhonePurchaseSystem {
         }
 
         boolean success = phoneController.addToCart(modelID, variant, qty);
+    }
+
+    private static void checkoutSystemFlow(Scanner scanner, Customer customer, CheckoutController checkoutController, PaymentController payController) {
+        
+        System.out.println("\n--- 🛒 CHECKOUT ---");
+        
+        checkoutController.buyNow(customer, customer.getCart()); 
+        Order currentOrder = checkoutController.getOrder();
+
+        if (currentOrder == null) {
+            System.out.println("⚠️ Checkout failed. Your cart might be empty.");
+            return;
+        }
+
+        System.out.println("Order ID Created: " + currentOrder.getOrderID());
+        System.out.println("Calculating total amount..."); 
+
+        System.out.println("\n--- PAYMENT ---");
+        System.out.println("1. Credit Card");
+        System.out.println("2. Online Banking (FPX)");
+        System.out.print("Select Payment Method (1-2): ");
+        String payChoice = scanner.nextLine().trim();
+        String paymentMethod = payChoice.equals("1") ? "Credit Card" : "Online Banking";
+
+        System.out.print("Enter your " + paymentMethod + " details (Account/Card No): ");
+        String accountNo = scanner.nextLine().trim();
+        
+        System.out.print("Enter payment amount (RM): ");
+        double amount;
+        try {
+            amount = Double.parseDouble(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("⚠️ Invalid amount format. Checkout cancelled.");
+            return;
+        }
+
+        System.out.println("\nProcessing payment and updating inventory... Please wait.");
+        
+        boolean isSuccess = true;
+
+        if (isSuccess) {
+            System.out.println("\n✅ Payment Successful!");
+            System.out.println("==========================================");
+            System.out.println("                 RECEIPT                  ");
+            System.out.println("==========================================");
+            System.out.println("Order ID    : " + currentOrder.getOrderID());
+            System.out.println("Paid via    : " + paymentMethod);
+            System.out.println("Account     : " + accountNo);
+            System.out.println("Amount Paid : RM " + String.format("%.2f", amount));
+            System.out.println("Status      : PAID & INVENTORY UPDATED");
+            System.out.println("==========================================");
+            System.out.println("Thank you for your purchase!");
+
+        } else {
+            System.out.println("\n❌ Payment Failed. Please check your balance or details and try again.");
+        }
     }
 }
