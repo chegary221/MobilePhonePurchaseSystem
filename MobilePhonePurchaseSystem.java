@@ -152,6 +152,7 @@ public class MobilePhonePurchaseSystem {
                     break;
             }
         }
+    }
 
     // =========================================================================
     // UC 3 — Browse Phones & Add to Cart
