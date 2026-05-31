@@ -32,7 +32,7 @@ public class Cart {
         for (int i = 0; i < size; i++) {
             if (items[i] != null) {
                 // Multiplies the price of the phone by the quantity added
-                total += (items[i].getPhone().getPrice() * items[i].getQuantity());
+                total += (items[i].getPhone().getPrice() * items[i].getQty());
             }
         }
         
