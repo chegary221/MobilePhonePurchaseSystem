@@ -1,7 +1,7 @@
 public class OrderController {
     
     private Order[] orderList;
-    private int orderCount; // 记录当前存了多少个订单
+    private int orderCount;
 
     public OrderController(Order[] orderList) {
         this.orderList = orderList;
@@ -16,11 +16,10 @@ public class OrderController {
     }
 
     public OrderController() {
-        this.orderList = new Order[100]; // 默认容量设为 100
+        this.orderList = new Order[100];
         this.orderCount = 0;
     }
 
-    // 返回纯数组
     public Order[] getTransactionHistory() {
         if (orderList == null || orderCount == 0) {
             System.out.println("No transaction history found.");
@@ -86,7 +85,6 @@ public class OrderController {
         return null;
     }
 
-    // 替代原来的 List.add()
     public void addOrder(Order order) {
         if (order != null) {
             if (orderCount < orderList.length) {
