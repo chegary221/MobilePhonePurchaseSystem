@@ -98,7 +98,7 @@ public class MobilePhonePurchaseSystem {
                         } 
                         else if (currentUser.getRole().equals("Customer")) {
                             // NO MORE TELEPORTING! Just welcome them back to the menu.
-                            System.out.println("\n[System] Login successful! Returning to Main Menu so you can browse phones.");
+                            System.out.println("\nLogin successful! Returning to Main Menu so you can browse phones.");
                         }
                     }
                     break;
@@ -160,8 +160,6 @@ public class MobilePhonePurchaseSystem {
      */
     private static void browsePhonesFlow(Scanner scanner, PhoneController phoneController) {
 
-        System.out.println("\n[System] clickBrowsePhones()");
-
         // :System → PhoneController: requestPhoneList()
         // PhoneController internally calls Database.retrieveCatalogData()
         List<Phone> phoneList = phoneController.requestPhoneList();
@@ -172,8 +170,8 @@ public class MobilePhonePurchaseSystem {
             // Database → PhoneController: connectionError
             // PhoneController → :System: returnError()
             // :System → Customer: displayErrorMsg()
-            System.out.println("[System] displayErrorMsg(\"Unable to load phone catalog." +
-                               " Please try again later.\")");
+            System.out.println("Unable to load phone catalog." +
+                               " Please try again later.");
             return;
         }
 
@@ -181,7 +179,6 @@ public class MobilePhonePurchaseSystem {
         // Database → PhoneController: catalogData
         // PhoneController → :System: phoneList
         // :System → Customer: displayPhoneList()
-        System.out.println("\n[System] displayPhoneList()");
         System.out.println("------------------------------------------");
         System.out.printf("%-6s %-10s %-15s %s%n", "No.", "ID", "Model", "Price (RM)");
         System.out.println("------------------------------------------");
@@ -205,12 +202,11 @@ public class MobilePhonePurchaseSystem {
         Phone selected = phoneController.getPhoneDetails(modelID);
 
         if (selected == null) {
-            System.out.println("[System] displayErrorMsg(\"Phone model not found.\")");
+            System.out.println("Phone model not found.");
             return;
         }
 
         // :System → Customer: displayDetailedProductPage()
-        System.out.println("\n[System] displayDetailedProductPage()");
         System.out.println("==========================================");
         System.out.println("  " + selected.getBrand() + " " + selected.getModel());
         System.out.println("  Price        : RM" + String.format("%.2f", selected.getPrice()));
@@ -223,7 +219,7 @@ public class MobilePhonePurchaseSystem {
         String addChoice = scanner.nextLine().trim();
 
         if (!addChoice.equalsIgnoreCase("yes")) {
-            System.out.println("[System] Returning to main menu.");
+            System.out.println("Returning to main menu.");
             return;
         }
 
@@ -236,7 +232,7 @@ public class MobilePhonePurchaseSystem {
         try {
             qty = Integer.parseInt(scanner.nextLine().trim());
         } catch (NumberFormatException e) {
-            System.out.println("[System] ⚠️  Invalid quantity. Returning to main menu.");
+            System.out.println("⚠️  Invalid quantity. Returning to main menu.");
             return;
         }
 
@@ -251,7 +247,7 @@ public class MobilePhonePurchaseSystem {
             System.out.println("✅ " + selected.getBrand() + " " + selected.getModel()
                     + " (" + variant + ") x" + qty + " has been added to your cart.");
         } else {
-            System.out.println("[System] displayErrorMsg(\"Could not add item to cart.\")");
+            System.out.println("Could not add item to cart.");
         }
     }
 }
