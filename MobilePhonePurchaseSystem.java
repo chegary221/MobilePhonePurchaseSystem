@@ -101,8 +101,8 @@ public class MobilePhonePurchaseSystem {
                             // This clears the systemUI warning!
                             System.out.println("\n[Redirecting to Customer Shopping Cart...]");
             
-                            // You can trigger your mock checkout here for now:
-                            // systemUI.initiateCheckout(customerOrder); 
+                            
+                            SystemUI.initiateCheckout(customerOrder); 
                         }
                     }
                     break;
