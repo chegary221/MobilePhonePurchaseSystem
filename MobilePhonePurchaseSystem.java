@@ -4,6 +4,11 @@ public class MobilePhonePurchaseSystem {
         public static void main(String[] args) {
                 Scanner scanner = new Scanner(System.in);
                 AccountController controller = new AccountController();
+                Database centralDatabase = new Database();
+                InventoryController invController = new InventoryController(centralDatabase);
+                PaymentController payController = new PaymentController();
+                InventoryUI inventoryUI = new InventoryUI(invController);
+                SystemUI systemUI = new SystemUI(payController);
                 controller.saveNewUser( new Staff("S001","CC","cc_admin@email.com","123456","0123",3));
                 RegisterPage registerPage = new RegisterPage(controller);
                 LoginPage loginPage = new LoginPage();
