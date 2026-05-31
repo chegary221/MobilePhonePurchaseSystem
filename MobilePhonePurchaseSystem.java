@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MobilePhonePurchaseSystem {
@@ -15,25 +13,20 @@ public class MobilePhonePurchaseSystem {
         PaymentController payController = new PaymentController();
         CheckoutController checkoutController = new CheckoutController();
         
-        // (Optional: If you used the AuthController fix for your friend's code, add it here)
-        // AuthController authController = new AuthController(controller);
-
         // 3. Build UIs and plug the controllers in
         InventoryUI inventoryUI = new InventoryUI(invController);
         SystemUI systemUI = new SystemUI(payController);
         RegisterPage registerPage = new RegisterPage(controller);
-        
-        // (If using AuthController fix, change this to: new LoginPage(authController))
         LoginPage loginPage = new LoginPage(); 
 
         // 4. Create your test user
         controller.saveNewUser(new Staff("S001", "CC", "cc_admin@email.com", "123456", "0123", 3));
 
-        // ── Phone catalog (simulates Database) ────────────────────────────────
-        List<Phone> catalog = new ArrayList<>();
-        catalog.add(new Phone("F001", "Apple",   "iPhone 15",   3899.00, 10));
-        catalog.add(new Phone("F002", "Samsung", "Galaxy S24",  3599.00, 10));
-        catalog.add(new Phone("F003", "Honor",   "X9b",         2778.00,  5));
+        // ── Phone catalog (simulates Database) ── 换成纯数组 ───────────────
+        Phone[] catalog = new Phone[100];
+        catalog[0] = new Phone("F001", "Apple",   "iPhone 15",   3899.00, 10);
+        catalog[1] = new Phone("F002", "Samsung", "Galaxy S24",  3599.00, 10);
+        catalog[2] = new Phone("F003", "Honor",   "X9b",         2778.00,  5);
 
         System.out.println("===================================================");
         System.out.println("📱 WELCOME TO THE MOBILE PHONE PURCHASE SYSTEM 📱");
@@ -54,14 +47,13 @@ public class MobilePhonePurchaseSystem {
             System.out.println("1. Register a New Account");
             System.out.println("2. Log In");
             System.out.println("3. Browse Phones (UC 3)");
-            System.out.println("4. Go to Checkout"); // NEW OPTION
+            System.out.println("4. Go to Checkout"); 
             System.out.println("5. Exit System");
             System.out.print("Select an option (1-5): ");
 
             String choice = scanner.nextLine().trim();
 
             switch (choice) {
-
                 // ── UC: Register ──────────────────────────────────────────────
                 case "1":
                     System.out.println("\n--- REGISTRATION FORM ---");
@@ -93,11 +85,9 @@ public class MobilePhonePurchaseSystem {
                         currentUser = loggedInUser; // Save the user in the system's memory!
 
                         if (currentUser.getRole().equals("Staff")) {
-                            // Staff usually go straight to their dashboard
                             inventoryUI.navigateInventoryDashboard(); 
                         } 
                         else if (currentUser.getRole().equals("Customer")) {
-                            // NO MORE TELEPORTING! Just welcome them back to the menu.
                             System.out.println("\nLogin successful! Returning to Main Menu so you can browse phones.");
                         }
                     }
@@ -109,9 +99,7 @@ public class MobilePhonePurchaseSystem {
                         System.out.println("\n⚠️ Please log in as a Customer to browse and add items to your cart.");
                     } else {
                         Customer currentCustomer = (Customer) currentUser;
-
                         PhoneController phoneController = new PhoneController(catalog, currentCustomer.getCart());
-
                         browsePhonesFlow(scanner, phoneController);
                     }
                     break;
@@ -121,16 +109,9 @@ public class MobilePhonePurchaseSystem {
                     if (currentUser == null || !currentUser.getRole().equals("Customer")) {
                         System.out.println("\n⚠️ Please log in as a Customer to access the checkout.");
                     } else {
-                        // 1. Get the current logged-in Customer
                         Customer currentCustomer = (Customer) currentUser;
-                        
-                        // 2. Grab the data from their cart
-                        // (Note: Adjust getItems() and calculateTotal() if your Cart class uses different method names!)
-                        // 3. Build the REAL order using your teammate's best constructor!
                         checkoutController.buyNow(currentCustomer, currentCustomer.getCart());
-                        
-                        // 4. Send the fully built order to the UI!
-                        systemUI.initiateCheckout(checkoutController.getOrder()); // Assuming you have a method to get the current order in your controller
+                        systemUI.initiateCheckout(checkoutController.getOrder()); 
                     }
                     break;
 
@@ -150,42 +131,39 @@ public class MobilePhonePurchaseSystem {
 
     // =========================================================================
     // UC 3 — Browse Phones & Add to Cart
-    // Represents the :System lifeline in the sequence diagram.
     // =========================================================================
-
-    /**
-     * clickBrowsePhones() — entry point triggered when user selects "Browse Phones".
-     * Calls PhoneController.requestPhoneList(); handles DB connection failure (E1)
-     * or renders the phone list on success.
-     */
     private static void browsePhonesFlow(Scanner scanner, PhoneController phoneController) {
 
-        // :System → PhoneController: requestPhoneList()
-        // PhoneController internally calls Database.retrieveCatalogData()
-        List<Phone> phoneList = phoneController.requestPhoneList();
+        Phone[] phoneList = phoneController.requestPhoneList();
 
-        // ── E1: Database Connection Failure ───────────────────────────────────
-        // Simulated: if catalog returns empty, treat as connection error
-        if (phoneList == null || phoneList.isEmpty()) {
-            // Database → PhoneController: connectionError
-            // PhoneController → :System: returnError()
-            // :System → Customer: displayErrorMsg()
-            System.out.println("Unable to load phone catalog." +
-                               " Please try again later.");
+        // ── E1: Database Connection Failure ───────────
+        boolean isEmpty = true;
+        if (phoneList != null) {
+            for (int i = 0; i < phoneList.length; i++) {
+                if (phoneList[i] != null) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+        }
+
+        if (isEmpty) {
+            System.out.println("Unable to load phone catalog. Please try again later.");
             return;
         }
 
         // ── Basic Flow ────────────────────────────────────────────────────────
-        // Database → PhoneController: catalogData
-        // PhoneController → :System: phoneList
-        // :System → Customer: displayPhoneList()
         System.out.println("------------------------------------------");
         System.out.printf("%-6s %-10s %-15s %s%n", "No.", "ID", "Model", "Price (RM)");
         System.out.println("------------------------------------------");
-        for (int i = 0; i < phoneList.size(); i++) {
-            Phone p = phoneList.get(i);
-            System.out.printf("%-6d %-10s %-15s %.2f%n",
-                    i + 1, p.getPhoneID(), p.getBrand() + " " + p.getModel(), p.getPrice());
+        
+        int displayIndex = 1;
+        for (int i = 0; i < phoneList.length; i++) {
+            Phone p = phoneList[i];
+            if (p != null) {
+                System.out.printf("%-6d %-10s %-15s %.2f%n",
+                        displayIndex++, p.getPhoneID(), p.getBrand() + " " + p.getModel(), p.getPrice());
+            }
         }
         System.out.println("------------------------------------------");
 
@@ -195,24 +173,14 @@ public class MobilePhonePurchaseSystem {
 
         if (modelID.equalsIgnoreCase("back")) return;
 
-        // :System → PhoneController: getPhoneDetails(modelID)
-        // PhoneController → Database: queryPhoneSpecs(modelID)
-        // Database → PhoneController: phoneDetails
-        // PhoneController → :System: details
         Phone selected = phoneController.getPhoneDetails(modelID);
 
         if (selected == null) {
-            System.out.println("Phone model not found.");
             return;
         }
 
         // :System → Customer: displayDetailedProductPage()
-        System.out.println("==========================================");
-        System.out.println("  " + selected.getBrand() + " " + selected.getModel());
-        System.out.println("  Price        : RM" + String.format("%.2f", selected.getPrice()));
-        System.out.println("  Stock        : " + selected.getStockQuantity());
-        System.out.println("  Stock Status : " + selected.getStockStatus());
-        System.out.println("==========================================");
+        // (Details are printed inside getPhoneDetails in Controller, but we can print more if needed)
 
         // ── opt [Customer clicks "Add to Cart"] ───────────────────────────────
         System.out.print("\nAdd to cart? (yes / no): ");
@@ -223,7 +191,6 @@ public class MobilePhonePurchaseSystem {
             return;
         }
 
-        // Customer: clickAddToCart(variant, qty)
         System.out.print("Enter variant (e.g. Black 256GB): ");
         String variant = scanner.nextLine().trim();
 
@@ -236,18 +203,6 @@ public class MobilePhonePurchaseSystem {
             return;
         }
 
-        // :System → PhoneController: addItemToCart(modelID, variant, qty)
-        // PhoneController → Cart: updateCartItems(product, qty)
-        // Cart → PhoneController: cartUpdatedSuccess
         boolean success = phoneController.addToCart(modelID, variant, qty);
-
-        if (success) {
-            // PhoneController → :System: showSuccessNotification()
-            // :System → Customer: displayConfirmationMsg()
-            System.out.println("✅ " + selected.getBrand() + " " + selected.getModel()
-                    + " (" + variant + ") x" + qty + " has been added to your cart.");
-        } else {
-            System.out.println("Could not add item to cart.");
-        }
     }
 }
