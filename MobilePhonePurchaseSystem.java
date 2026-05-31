@@ -13,6 +13,7 @@ public class MobilePhonePurchaseSystem {
         AccountController controller = new AccountController();
         InventoryController invController = new InventoryController(centralDatabase);
         PaymentController payController = new PaymentController();
+        CheckoutController checkoutController = new CheckoutController();
         
         // (Optional: If you used the AuthController fix for your friend's code, add it here)
         // AuthController authController = new AuthController(controller);
@@ -33,14 +34,6 @@ public class MobilePhonePurchaseSystem {
         catalog.add(new Phone("F001", "Apple",   "iPhone 15",   3899.00, 10));
         catalog.add(new Phone("F002", "Samsung", "Galaxy S24",  3599.00, 10));
         catalog.add(new Phone("F003", "Honor",   "X9b",         2778.00,  5));
-
-        // ── Demo customer with pre-loaded cart (to be moved inside dashboard) ─
-        Customer customer = new Customer("C001", "Gary", "gary@gmail.com",
-                                         "123456", "0123456789", "Penang");
-        Cart     cart     = customer.getCart();
-
-        // PhoneController wires the catalog + cart together
-        PhoneController phoneController = new PhoneController(catalog, cart);
 
         System.out.println("===================================================");
         System.out.println("📱 WELCOME TO THE MOBILE PHONE PURCHASE SYSTEM 📱");
@@ -115,11 +108,14 @@ public class MobilePhonePurchaseSystem {
                     if (currentUser == null || !currentUser.getRole().equals("Customer")) {
                         System.out.println("\n⚠️ Please log in as a Customer to browse and add items to your cart.");
                     } else {
+                        Customer currentCustomer = (Customer) currentUser;
+
+                        PhoneController phoneController = new PhoneController(catalog, currentCustomer.getCart());
+
                         browsePhonesFlow(scanner, phoneController);
                     }
                     break;
 
-                // ── NEW UC: Checkout ──────────────────────────────────────────
                 // ── NEW UC: Checkout ──────────────────────────────────────────
                 case "4":
                     if (currentUser == null || !currentUser.getRole().equals("Customer")) {
@@ -130,14 +126,11 @@ public class MobilePhonePurchaseSystem {
                         
                         // 2. Grab the data from their cart
                         // (Note: Adjust getItems() and calculateTotal() if your Cart class uses different method names!)
-                        CartItem[] cartItems = currentCustomer.getCart().getItems();
-                        double finalTotal = currentCustomer.getCart().calculateTotal(); 
-                        
                         // 3. Build the REAL order using your teammate's best constructor!
-                        Order realOrder = new Order(currentCustomer, cartItems, finalTotal); 
+                        checkoutController.buyNow(currentCustomer, currentCustomer.getCart());
                         
                         // 4. Send the fully built order to the UI!
-                        systemUI.initiateCheckout(realOrder);
+                        systemUI.initiateCheckout(checkoutController.getOrder()); // Assuming you have a method to get the current order in your controller
                     }
                     break;
 
@@ -264,18 +257,3 @@ public class MobilePhonePurchaseSystem {
         }
     }
 }
-// 【留言区】
-// 优先完成自己负责的 USE CASE 的雏形
-// 不同人负责的 USE CASE 之间的衔接/建议/建构方向在这里沟通（？ --gary
-
-/* <Checkout相关>
-1. add to cart：弄input
-2. process payment：由于amount有了在order payment只需要存status和paymethod（？
---gary */
-
-/* <整体系统相关及隐患>
-1. order status 似乎需要staff处理 但我发现UC没有manage order之类的 该加还是直接把status删掉？
-2. 感觉user的data member可以删掉一两个（？）还有customer和staff那两个id也删掉 user已经有id了 
-   代码的部分直接搞成用Cxxx和Sxxx来区分两者
-3. generalization目前只有user一种 该往phone上加分支吗 还是有没有其他更优解
-*/
