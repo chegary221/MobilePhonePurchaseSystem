@@ -248,8 +248,6 @@ public class MobilePhonePurchaseSystem {
         if (success) {
             // PhoneController → :System: showSuccessNotification()
             // :System → Customer: displayConfirmationMsg()
-            System.out.println("[System] showSuccessNotification()");
-            System.out.println("[System] displayConfirmationMsg()");
             System.out.println("✅ " + selected.getBrand() + " " + selected.getModel()
                     + " (" + variant + ") x" + qty + " has been added to your cart.");
         } else {
