@@ -101,8 +101,12 @@ public class MobilePhonePurchaseSystem {
                             // This clears the systemUI warning!
                             System.out.println("\n[Redirecting to Customer Shopping Cart...]");
             
-                            
-                            SystemUI.initiateCheckout(customerOrder); 
+                            // 1. Create a temporary mock Order just to test the UI 
+                            // (You will replace this later with the actual order generated from the Cart)
+                            Order testOrder = new Order(); // Note: put your required parameters in the () if your Order class needs them
+    
+                            // 2. Call the UI and pass the order in!
+                            systemUI.initiateCheckout(testOrder);
                         }
                     }
                     break;
