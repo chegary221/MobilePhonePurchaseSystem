@@ -46,13 +46,24 @@ public class MobilePhonePurchaseSystem {
         System.out.println("📱 WELCOME TO THE MOBILE PHONE PURCHASE SYSTEM 📱");
         System.out.println("===================================================");
 
+        User currentUser = null;
+        
         while (true) {
             System.out.println("\n--- MAIN MENU ---");
+            
+            // Helpful UI to show who is logged in
+            if (currentUser == null) {
+                System.out.println("[Status: Guest (Not Logged In)]");
+            } else {
+                System.out.println("[Status: Logged In as " + currentUser.getName() + " (" + currentUser.getRole() + ")]");
+            }
+            
             System.out.println("1. Register a New Account");
             System.out.println("2. Log In");
             System.out.println("3. Browse Phones (UC 3)");
-            System.out.println("4. Exit System");
-            System.out.print("Select an option (1-4): ");
+            System.out.println("4. Go to Checkout"); // NEW OPTION
+            System.out.println("5. Exit System");
+            System.out.print("Select an option (1-5): ");
 
             String choice = scanner.nextLine().trim();
 
@@ -63,16 +74,12 @@ public class MobilePhonePurchaseSystem {
                     System.out.println("\n--- REGISTRATION FORM ---");
                     System.out.print("Enter Username: ");
                     String username = scanner.nextLine();
-
                     System.out.print("Enter Email: ");
                     String email = scanner.nextLine();
-
                     System.out.print("Enter Password: ");
                     String password = scanner.nextLine();
-
                     System.out.print("Enter Phone Number: ");
                     String phone = scanner.nextLine();
-
                     System.out.print("Enter Address: ");
                     String address = scanner.nextLine();
 
@@ -84,51 +91,67 @@ public class MobilePhonePurchaseSystem {
                     System.out.println("\n--- LOGIN SCREEN ---");
                     System.out.print("Enter Email: ");
                     String loginEmail = scanner.nextLine();
-
                     System.out.print("Enter Password: ");
                     String loginPassword = scanner.nextLine();
 
-                    // 1. Capture the returned user!
                     User loggedInUser = loginPage.enterLogin(loginEmail, loginPassword);
 
-                    // 2. If login is successful (not null), route them to the right UI
                     if (loggedInUser != null) {
-                        if (loggedInUser.getRole().equals("Staff")) {
-                            // This clears the inventoryUI warning!
+                        currentUser = loggedInUser; // Save the user in the system's memory!
+
+                        if (currentUser.getRole().equals("Staff")) {
+                            // Staff usually go straight to their dashboard
                             inventoryUI.navigateInventoryDashboard(); 
                         } 
-                        else if (loggedInUser.getRole().equals("Customer")) {
-                            // This clears the systemUI warning!
-                            System.out.println("\n[Redirecting to Customer Shopping Cart...]");
-            
-                            // 1. Create a temporary mock Order just to test the UI 
-                            // (You will replace this later with the actual order generated from the Cart)
-                            Order testOrder = new Order(); // Note: put your required parameters in the () if your Order class needs them
-    
-                            // 2. Call the UI and pass the order in!
-                            systemUI.initiateCheckout(testOrder);
+                        else if (currentUser.getRole().equals("Customer")) {
+                            // NO MORE TELEPORTING! Just welcome them back to the menu.
+                            System.out.println("\n[System] Login successful! Returning to Main Menu so you can browse phones.");
                         }
                     }
                     break;
 
-                // ── UC 3: Browse Phones & Add to Cart (:System role) ──────────
+                // ── UC 3: Browse Phones & Add to Cart ─────────────────────────
                 case "3":
-                    browsePhonesFlow(scanner, phoneController);
+                    if (currentUser == null || !currentUser.getRole().equals("Customer")) {
+                        System.out.println("\n⚠️ Please log in as a Customer to browse and add items to your cart.");
+                    } else {
+                        browsePhonesFlow(scanner, phoneController);
+                    }
+                    break;
+
+                // ── NEW UC: Checkout ──────────────────────────────────────────
+                case "4":
+                    if (currentUser == null || !currentUser.getRole().equals("Customer")) {
+                        System.out.println("\n⚠️ Please log in as a Customer to access the checkout.");
+                    } else {
+                        // 1. Get the current logged-in Customer
+                        Customer currentCustomer = (Customer) currentUser;
+                        
+                        // 2. Generate a REAL order using their actual Cart data
+                        // (You may need to adjust this depending on how your Order constructor is written)
+                        Order realOrder = new Order(); 
+                        
+                        // Example: Assuming your Order needs the total amount from the cart
+                        // double cartTotal = currentCustomer.getCart().calculateTotal();
+                        // realOrder.setAmount(cartTotal); 
+                        
+                        // 3. Pass the real order to the UI!
+                        systemUI.initiateCheckout(realOrder);
+                    }
                     break;
 
                 // ── Exit ──────────────────────────────────────────────────────
-                case "4":
+                case "5":
                     System.out.println("\nExiting system. Have a great day!");
                     scanner.close();
                     System.exit(0);
                     break;
 
                 default:
-                    System.out.println("\n⚠️  Invalid selection! Please type 1, 2, 3, or 4.");
+                    System.out.println("\n⚠️ Invalid selection! Please type 1, 2, 3, 4, or 5.");
                     break;
             }
         }
-    }
 
     // =========================================================================
     // UC 3 — Browse Phones & Add to Cart
