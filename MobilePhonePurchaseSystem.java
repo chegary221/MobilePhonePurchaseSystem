@@ -6,12 +6,27 @@ public class MobilePhonePurchaseSystem {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        // 1. Start the Database 
+        Database centralDatabase = new Database();
+
+        // 2. Build ALL Controllers first
         AccountController controller = new AccountController();
+        InventoryController invController = new InventoryController(centralDatabase);
+        PaymentController payController = new PaymentController();
+        
+        // (Optional: If you used the AuthController fix for your friend's code, add it here)
+        // AuthController authController = new AuthController(controller);
+
+        // 3. Build UIs and plug the controllers in
         InventoryUI inventoryUI = new InventoryUI(invController);
         SystemUI systemUI = new SystemUI(payController);
-        controller.saveNewUser(new Staff("S001", "CC", "cc_admin@email.com", "123456", "0123", 3));
         RegisterPage registerPage = new RegisterPage(controller);
-        LoginPage loginPage = new LoginPage();
+        
+        // (If using AuthController fix, change this to: new LoginPage(authController))
+        LoginPage loginPage = new LoginPage(); 
+
+        // 4. Create your test user
+        controller.saveNewUser(new Staff("S001", "CC", "cc_admin@email.com", "123456", "0123", 3));
 
         // ── Phone catalog (simulates Database) ────────────────────────────────
         List<Phone> catalog = new ArrayList<>();
