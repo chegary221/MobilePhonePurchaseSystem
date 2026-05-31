@@ -46,10 +46,11 @@ public class MobilePhonePurchaseSystem {
             
             System.out.println("1. Register a New Account");
             System.out.println("2. Log In");
-            System.out.println("3. Browse Phones (UC 3)");
+            System.out.println("3. Browse Phones");
             System.out.println("4. Go to Checkout"); 
-            System.out.println("5. Exit System");
-            System.out.print("Select an option (1-5): ");
+            System.out.println("5. Manage Inventory (Staff Only)");
+            System.out.println("6. Exit System");
+            System.out.print("Select an option (1-6): ");
 
             String choice = scanner.nextLine().trim();
 
@@ -115,8 +116,17 @@ public class MobilePhonePurchaseSystem {
                     }
                     break;
 
-                // ── Exit ──────────────────────────────────────────────────────
                 case "5":
+                    if (currentUser == null || !currentUser.getRole().equals("Staff")) {
+                        // 拦截不是 Staff 的用户
+                        System.out.println("\n⚠️ Access Denied! Only Staff members can manage the inventory.");
+                    } else {
+                        System.out.println("\n--- Entering Inventory Management ---");
+                        inventoryUI.navigateInventoryDashboard(); 
+                    }
+                    break;
+                // ── Exit ──────────────────────────────────────────────────────
+                case "6":
                     System.out.println("\nExiting system. Have a great day!");
                     scanner.close();
                     System.exit(0);
