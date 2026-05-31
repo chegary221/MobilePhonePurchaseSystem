@@ -71,7 +71,23 @@ public class MobilePhonePurchaseSystem {
                     System.out.print("Enter Password: ");
                     String loginPassword = scanner.nextLine();
 
-                    loginPage.enterLogin(loginEmail, loginPassword);
+                    // 1. Capture the returned user!
+                    User loggedInUser = loginPage.enterLogin(loginEmail, loginPassword);
+
+                    // 2. If login is successful (not null), route them to the right UI
+                    if (loggedInUser != null) {
+                        if (loggedInUser.getRole().equals("Staff")) {
+                            // This clears the inventoryUI warning!
+                            inventoryUI.navigateInventoryDashboard(); 
+                        } 
+                        else if (loggedInUser.getRole().equals("Customer")) {
+                            // This clears the systemUI warning!
+                            System.out.println("\n[Redirecting to Customer Shopping Cart...]");
+            
+                            // You can trigger your mock checkout here for now:
+                            // systemUI.initiateCheckout(customerOrder); 
+                        }
+                    }
                     break;
 
                 // ── UC 3: Browse Phones & Add to Cart (:System role) ──────────
