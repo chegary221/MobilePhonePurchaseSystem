@@ -1,9 +1,9 @@
 public class LoginPage {
     private AuthController controller = new AuthController();
 
-    public void enterLogin(String email, String password) {
+    public User enterLogin(String email, String password) {
         System.out.println("\n[Login UI] Submitting login request...");
-        controller.authRequest(email, password, this);
+        return controller.authRequest(email, password, this);
     }
 
     public void displayError(String message) {
